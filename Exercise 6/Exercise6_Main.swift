@@ -1,0 +1,57 @@
+/*
+	 **Functions:**
+	 - `each` = Iterate over each element in the array
+	 - `all` = Returns true if all of the elements is not false
+	 - `any` = Returns true if at least one of the elements is not false
+	 - `contains` = Returns true if the element is present
+	 - `indexOf` = Returns the index at which element can be found
+	 - `filter` = Returns an array of all the elements that pass a truth test
+	 - `reject` = Returns the elements in the array without the elements that pass a truth test
+	 - `pluck` = Returns an array of a specific value from all the elements
+*/
+ 
+let students = [
+    ["first" : "Obi-Wan",   "last" : "Kenobi",      "age" : "55", "class" : "Math"],
+    ["first" : "Darth",     "last" : "Vader",		"age" : "76", "class" : "English"],
+    ["first" : "Anakin",    "last" : "Skywalker",	"age" : "17", "class" : "History"],
+    ["first" : "Darth",     "last" : "Sidious",		"age" : "88", "class" : "Science"],
+    ["first" : "Padme",     "last" : "Amidala",		"age" : "25", "class" : "Math"],
+    ["first" : "Mace",      "last" : "Windu",		"age" : "56", "class" : "Science"],
+    ["first" : "Count",     "last" : "Dooku",		"age" : "67", "class" : "History"],
+    ["first" : "Luke",      "last" : "Skywalker",	"age" : "21", "class" : "Math"],
+    ["first" : "Han",       "last" : "Solo",		"age" : "35", "class" : "Science"],
+    ["first" : "Leia",      "last" : "Organa",		"age" : "21", "class" : "English"],
+    ["first" : "Chew",      "last" : "Bacca",		"age" : "33", "class" : "Science"],
+    ["first" : "Boba",      "last" : "Fett",		"age" : "32", "class" : "History"],
+    ["first" : "Lando",     "last" : "Calrissian",	"age" : "55", "class" : "English"],
+    ["first" : "Kylo",      "last" : "Ren",			"age" : "21", "class" : "Math"],
+    ["first" : "Poe",       "last" : "Dameron",		"age" : "25", "class" : "History"],
+    ["first" : "Finn",      "last" : "FN-2187",		"age" : "23", "class" : "Science"],
+    ["first" : "Rey",       "last" : "Rey",			"age" : "16", "class" : "English"]
+]
+
+// Displays the index of each student in students
+	each(students: students) { print("\($0["first"]!) \($0["last"]!) is index \($1)") }
+
+// Prints either true or false if either all/any student matches the description
+	print("all = \(all(students: students) { Int($0["age"]!)! < 88 })")
+	print("any = \(any(students: students) { Int($0["age"]!)! <= 16 })")
+
+// Prints the index of the student w/ lastname Sidious
+	print("indexOf = \(students[indexOf(students: students) { $0["last"] == "Sidious" }!]["first"]!)")
+
+// Prints either true/false if there is a student named Chew
+	print("contains = \(contains(students: students) { $0["first"] == "Chew" })")
+
+// Prints an array of students who do/don't meet the condition
+	print("filter: \n\t\(filter(students: students) { $0["class"]! == "English" }!)")
+	print("reject: \n\t\(reject(students: students) { Int($0["age"]!)! >= 21 }!)")
+	
+// Prints the array sorted by age and last name
+	print("pluck: \n\t\(pluck(students: students) { $0["age"]! }.sorted())")
+	print("pluck: \n\t\(pluck(students: students) { $0["last"]! })")
+
+	let text = "Last names of math and science students where age > 25 and age < 80"
+	let selected = pluck(students: filter(students: filter(students: students) { $0["class"] == "Math" }! + filter(students: students) { $0["class"] == "Science" }!) { Int($0["age"]!)! > 25 && Int($0["age"]!)! < 80 }!) { $0["last"]! }
+
+	print("\(text)\n\t\(selected)")
