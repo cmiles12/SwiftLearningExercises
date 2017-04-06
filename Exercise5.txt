@@ -1,3 +1,0 @@
-<< Link to Exercise5 Repository >>
-
-https://github.com/cmiles12/Swift-Exercise-5/tree/master
