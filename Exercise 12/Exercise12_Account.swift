@@ -1,0 +1,97 @@
+	import Foundation
+	
+// Creates an Account blueprint, which is extended with description
+
+	public protocol Account {
+
+		var balance: Double { get set }
+
+		var customer: Customer { get }
+
+		func debit(amount: Double) throws
+
+		func credit(amount: Double)
+
+		var description: String { get }
+	}
+
+	extension Account {
+		
+		public var description: String {
+
+			let formatter = NumberFormatter()
+			formatter.numberStyle = .currency
+			return formatter.string(from: NSNumber(value: balance))!
+		}
+	}
+	
+// Creates BaseAccount class with an extension of functions
+
+	public class BaseAccount {
+
+		public var balance = 0.0
+
+		public unowned var customer: Customer
+
+		public init(customer: Customer) {
+
+			self.customer = customer
+		}
+	}
+
+	extension BaseAccount {
+
+		public func debit(amount: Double) throws {
+
+			guard (balance - amount) >= 0 else {
+
+				throw TransactionError.InsufficientFunds(balance: balance, debiting: amount)
+			}
+
+			balance -= amount
+		}
+
+		public func credit(amount: Double) {
+			
+			balance += amount
+		}
+	}
+	
+// Creates the CheckingAccount and SavingsAccount classes
+
+	public class CheckingAccount: BaseAccount, Account {
+		
+		deinit {
+			
+			print("deinit checking")
+		}
+	}
+
+	public class SavingsAccount: BaseAccount, Account {
+		
+		private let interest = 2.5
+		
+		public override init(customer: Customer) {
+
+			super.init(customer: customer)
+
+			balance = 500.00
+		}
+		
+		public func applyInterest() {
+			
+			balance *= (interest / 100) + 1
+		}
+		
+		public var description: String {
+			
+			let formatter = NumberFormatter()
+			formatter.numberStyle = .currency
+			return "\(formatter.string(from: NSNumber(value: balance))!) in Savings with interest = \(interest) annually"
+		}
+		
+		deinit {
+
+			print("deinit savings")
+		}
+	}
